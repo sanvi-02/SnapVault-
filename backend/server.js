@@ -53,7 +53,11 @@ io.on("connection", (socket) => {
 // Middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5175",
+      "snap-vault-pwha-j55v6u9ug-sanvi-jains-projects.vercel.app",
+    ],
     credentials: true,
   })
 );
