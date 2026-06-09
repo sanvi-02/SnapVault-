@@ -22,47 +22,56 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
 const app = express();
 const server = http.createServer(app);
 
-// Socket.io
-const io = new Server(server, {
-  cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5175",
-    methods: ["GET", "POST"],
+// ─── CORS Helper ─────────────────────────────────────────────────────────────
+function isAllowedOrigin(origin) {
+  const allowed = [
+    /^http:\/\/localhost:\d+$/,
+    /^https:\/\/[a-z0-9-]+\.vercel\.app$/, // sab *.vercel.app URLs
+  ];
+  return !origin || allowed.some((r) => r.test(origin));
+}
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (isAllowedOrigin(origin)) callback(null, true);
+    else callback(new Error("CORS blocked: " + origin));
   },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+// ─── Socket.io ───────────────────────────────────────────────────────────────
+const io = new Server(server, {
+  cors: corsOptions,
 });
 
 app.set("io", io);
 
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
-
   socket.on("join", (userId) => {
     if (userId) {
       socket.join(userId);
       console.log(`Socket joined room: ${userId}`);
     }
   });
-
   socket.on("disconnect", () => {
     console.log("Socket disconnected:", socket.id);
   });
 });
 
-// Middleware
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5175",
-      "https://snap-vault-pwha-j55v6u9ug-sanvi-jains-projects.vercel.app",
-    ],
-    credentials: true,
-  })
-);
+// ─── Middleware ───────────────────────────────────────────────────────────────
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// ─── Routes ──────────────────────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/media", mediaRoutes);
@@ -73,12 +82,14 @@ app.use("/api/search", searchRoutes);
 app.use("/api/tags", tagRoutes);
 app.use("/api/download", downloadRoutes);
 
-// MongoDB + Start Server
+// ─── Health Check ────────────────────────────────────────────────────────────
+app.get("/", (req, res) => res.json({ status: "ok" }));
+
+// ─── MongoDB + Server Start ───────────────────────────────────────────────────
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connected");
-
     server.listen(process.env.PORT || 8000, () => {
       console.log(`🚀 Server running on port ${process.env.PORT || 8000}`);
     });
