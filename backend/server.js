@@ -26,7 +26,6 @@ cloudinary.config({
 const app = express();
 const server = http.createServer(app);
 
-// ─── CORS Helper ─────────────────────────────────────────────────────────────
 function isAllowedOrigin(origin) {
   const allowed = [
     /^http:\/\/localhost:\d+$/,
