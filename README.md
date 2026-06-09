@@ -6,7 +6,7 @@ SnapVault is a full-stack MERN application that enables users to discover, organ
 
 ---
 ## Deployed Application
-Live Demo: https://snap-vault2-mvuz-git-main-sanvi-jains-projects.vercel.app/login
+Live Demo: snap-vault2-mvuz-git-main-sanvi-jains-projects.vercel.app
 
 ---
 
