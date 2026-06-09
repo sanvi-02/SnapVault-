@@ -5,7 +5,15 @@
 SnapVault is a full-stack MERN application that enables users to discover, organize, and retrieve event photos using facial recognition,  and real-time social interactions. The platform simplifies media management for events by automatically identifying users in uploaded photos and providing personalized photo collections.
 
 ---
+## Deployed Application
+Live Demo: https://snap-vault2-mvuz-git-main-sanvi-jains-projects.vercel.app/login
 
+---
+
+## Demo Video
+ Demo Video: https://drive.google.com/file/d/1pV7xsEMA6BIjP9FZp1LfAlLkw4HHNjZK/view?usp=sharing
+
+---
 ## Features
 
 ###  Authentication & Authorization
