@@ -56,13 +56,11 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5175",
-      "snap-vault-pwha-j55v6u9ug-sanvi-jains-projects.vercel.app",
+      "https://snap-vault-pwha-j55v6u9ug-sanvi-jains-projects.vercel.app",
     ],
     credentials: true,
   })
 );
-
-app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
