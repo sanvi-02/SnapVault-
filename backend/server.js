@@ -66,7 +66,7 @@ io.on("connection", (socket) => {
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("/(.*)", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
