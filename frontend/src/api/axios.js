@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://snapvault-backend-c1pv.onrender.com/api",
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    "https://snapvault-backend-c1pv.onrender.com/api",
 });
 
 API.interceptors.request.use((req) => {
